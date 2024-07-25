@@ -1,6 +1,5 @@
 require("dotenv").config();
 const express = require("express");
-const router = express.Router();
 const cors = require("cors");
 const nodemailer = require("nodemailer");
 
@@ -9,11 +8,12 @@ const app = express();
 
 // CORS configuration
 app.use(cors({
-  origin: 'https://my-portfolio-ivzk3kh22-lethanafs-projects.vercel.app'
+  origin: 'https://my-portfolio-ivzk3kh22-lethanafs-projects.vercel.app',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.use(express.json());
-app.use("/", router);
 
 const contactEmail = nodemailer.createTransport({
   service: 'gmail',
@@ -31,7 +31,7 @@ contactEmail.verify((error) => {
   }
 });
 
-router.post("/contact", (req, res) => {
+app.post("/contact", (req, res) => {
   const name = req.body.firstName + " " + req.body.lastName;
   const email = req.body.email;
   const message = req.body.message;
