@@ -4,7 +4,9 @@ const nodemailer = require("nodemailer");
 require("dotenv").config();
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: 'https://my-portfolio-beta-two-83.vercel.app/' 
+}));
 app.use(express.json());
 
 const contactEmail = nodemailer.createTransport({
@@ -17,9 +19,9 @@ const contactEmail = nodemailer.createTransport({
 
 contactEmail.verify((error) => {
   if (error) {
-    console.log(error);
+    console.error("Error in email configuration:", error);
   } else {
-    console.log("Ready to Send");
+    console.log("Email service is ready to send.");
   }
 });
 
@@ -38,7 +40,7 @@ app.post("/contact", (req, res) => {
 
   contactEmail.sendMail(mail, (error, info) => {
     if (error) {
-      console.log('Email send error:', error);
+      console.error('Email send error:', error);
       res.status(500).json({ code: 500, status: "Failed to send message" });
     } else {
       console.log('Email sent:', info.response);
@@ -47,4 +49,4 @@ app.post("/contact", (req, res) => {
   });
 });
 
-app.listen(5000, () => console.log("Server Running"));
+app.listen(5000, () => console.log("Server Running on port 5000"));
