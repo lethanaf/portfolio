@@ -1,25 +1,18 @@
-require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const nodemailer = require("nodemailer");
+require("dotenv").config();
 
 const app = express();
-
-// CORS configuration
-app.use(cors({
-  origin: 'https://my-portfolio-beta-two-83.vercel.app/', 
-  methods: 'GET,POST',
-  allowedHeaders: 'Content-Type'
-}));
-
+app.use(cors());
 app.use(express.json());
 
 const contactEmail = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: "rajabhishek439@gmail.com",
+    user: 'rajabhishek439@gmail.com',
     pass: process.env.PASS
-  },
+  }
 });
 
 contactEmail.verify((error) => {
@@ -31,23 +24,24 @@ contactEmail.verify((error) => {
 });
 
 app.post("/contact", (req, res) => {
-  const name = req.body.firstName + req.body.lastName;
-  const email = req.body.email;
-  const message = req.body.message;
-  const phone = req.body.phone;
+  const { firstName, lastName, email, phone, message } = req.body;
+  const name = `${firstName} ${lastName}`;
   const mail = {
     from: name,
     to: "rajabhishek439@gmail.com",
     subject: "Contact Form Submission - Portfolio",
     html: `<p>Name: ${name}</p>
-    <p>Email: ${email}</p>
-    <p>Phone: ${phone}</p>
-    <p>Message: ${message}</p>`,
+           <p>Email: ${email}</p>
+           <p>Phone: ${phone}</p>
+           <p>Message: ${message}</p>`,
   };
-  contactEmail.sendMail(mail, (error) => {
+
+  contactEmail.sendMail(mail, (error, info) => {
     if (error) {
-      res.json(error);
+      console.log('Email send error:', error);
+      res.status(500).json({ code: 500, status: "Failed to send message" });
     } else {
+      console.log('Email sent:', info.response);
       res.json({ code: 200, status: "Message Sent" });
     }
   });
