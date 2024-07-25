@@ -7,7 +7,7 @@ const app = express();
 
 // CORS configuration
 app.use(cors({
-  origin: 'https://my-portfolio-ivzk3kh22-lethanafs-projects.vercel.app', // Replace with your frontend URL
+  origin: 'https://my-portfolio-beta-two-83.vercel.app/', 
   methods: 'GET,POST',
   allowedHeaders: 'Content-Type'
 }));
