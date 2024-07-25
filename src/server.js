@@ -4,13 +4,16 @@ const router = express.Router();
 const cors = require("cors");
 const nodemailer = require("nodemailer");
 
-// server used to send send emails
+// server used to send emails
 const app = express();
-app.use(cors());
+
+// CORS configuration
+app.use(cors({
+  origin: 'https://my-portfolio-ivzk3kh22-lethanafs-projects.vercel.app'
+}));
+
 app.use(express.json());
 app.use("/", router);
-
-
 
 const contactEmail = nodemailer.createTransport({
   service: 'gmail',
@@ -29,7 +32,7 @@ contactEmail.verify((error) => {
 });
 
 router.post("/contact", (req, res) => {
-  const name = req.body.firstName + req.body.lastName;
+  const name = req.body.firstName + " " + req.body.lastName;
   const email = req.body.email;
   const message = req.body.message;
   const phone = req.body.phone;
@@ -44,7 +47,7 @@ router.post("/contact", (req, res) => {
   };
   contactEmail.sendMail(mail, (error) => {
     if (error) {
-      res.json(error);
+      res.status(500).json({ error: error.message });
     } else {
       res.json({ code: 200, status: "Message Sent" });
     }
