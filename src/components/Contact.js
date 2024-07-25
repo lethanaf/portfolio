@@ -28,14 +28,13 @@ export const Contact = () => {
   setButtonText("Sending...");
 
   try {
-    let response = await fetch("https://my-portfolio-beta-two-83.vercel.app/contact", {
-      method: "POST",
-      mode: 'no-cors', // Use 'no-cors' mode
-      headers: {
-        "Content-Type": "application/json;charset=utf-8",
-      },
-      body: JSON.stringify(formDetails),
-    });
+   let response = await fetch("https://my-portfolio-beta-two-83.vercel.app/contact", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json;charset=utf-8",
+  },
+  body: JSON.stringify(formDetails),
+});
 
     // Since response is opaque, you can't access the result
     setButtonText("Send");
