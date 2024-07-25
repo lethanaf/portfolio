@@ -26,6 +26,7 @@ contactEmail.verify((error) => {
 });
 
 app.post("/contact", (req, res) => {
+  console.log("posting");
   const { firstName, lastName, email, phone, message } = req.body;
   const name = `${firstName} ${lastName}`;
   const mail = {
