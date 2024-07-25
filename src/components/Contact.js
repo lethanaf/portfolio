@@ -24,25 +24,29 @@ export const Contact = () => {
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setButtonText("Sending...");
+  e.preventDefault();
+  setButtonText("Sending...");
 
+  try {
     let response = await fetch("https://my-portfolio-beta-two-83.vercel.app/contact", {
       method: "POST",
+      mode: 'no-cors', // Use 'no-cors' mode
       headers: {
         "Content-Type": "application/json;charset=utf-8",
       },
       body: JSON.stringify(formDetails),
     });
+
+    // Since response is opaque, you can't access the result
     setButtonText("Send");
-    let result = await response.json();
     setFormDetails(formInitialDetails);
-    if (result.code === 200) {
-      setStatus({ success: true, message: 'Message sent successfully' });
-    } else {
-      setStatus({ success: false, message: 'Something went wrong, please try again later.' });
-    }
-  };
+    setStatus({ success: true, message: 'Message sent successfully' });
+  } catch (error) {
+    setButtonText("Send");
+    setStatus({ success: false, message: 'Network error. Please try again later.' });
+  }
+};
+
 
   return (
     <section className="contact" id="connect">
