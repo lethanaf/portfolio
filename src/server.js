@@ -3,14 +3,13 @@ const express = require("express");
 const cors = require("cors");
 const nodemailer = require("nodemailer");
 
-// server used to send emails
 const app = express();
 
 // CORS configuration
 app.use(cors({
-  origin: 'https://my-portfolio-ivzk3kh22-lethanafs-projects.vercel.app',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  origin: 'https://my-portfolio-ivzk3kh22-lethanafs-projects.vercel.app', // Replace with your frontend URL
+  methods: 'GET,POST',
+  allowedHeaders: 'Content-Type'
 }));
 
 app.use(express.json());
@@ -32,7 +31,7 @@ contactEmail.verify((error) => {
 });
 
 app.post("/contact", (req, res) => {
-  const name = req.body.firstName + " " + req.body.lastName;
+  const name = req.body.firstName + req.body.lastName;
   const email = req.body.email;
   const message = req.body.message;
   const phone = req.body.phone;
@@ -47,7 +46,7 @@ app.post("/contact", (req, res) => {
   };
   contactEmail.sendMail(mail, (error) => {
     if (error) {
-      res.status(500).json({ error: error.message });
+      res.json(error);
     } else {
       res.json({ code: 200, status: "Message Sent" });
     }
